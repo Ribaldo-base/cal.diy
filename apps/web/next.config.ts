@@ -236,6 +236,9 @@ const nextConfig = (phase: string): NextConfig => {
     experimental: {
       optimizePackageImports: ["@calcom/ui"],
     },
+    ...(process.env.BASE44_PUBLIC_HOST_SUFFIX
+      ? { allowedDevOrigins: [`3000-${process.env.BASE44_PUBLIC_HOST_SUFFIX}`] }
+      : {}),
     productionBrowserSourceMaps: true,
     transpilePackages: [
       "@calcom/app-store",

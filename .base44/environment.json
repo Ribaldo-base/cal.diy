@@ -1,0 +1,10 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/auth/setup?step=1",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {"name": "NEXTAUTH_SECRET", "description": "NextAuth session signing secret", "requiredAtBoot": true, "generatedForDevelopment": true},
+    {"name": "CALENDSO_ENCRYPTION_KEY", "description": "Encryption key for stored credentials", "requiredAtBoot": true, "generatedForDevelopment": true},
+    {"name": "CRON_API_KEY", "description": "API key for cron endpoints", "requiredAtBoot": false, "generatedForDevelopment": true}
+  ]
+}

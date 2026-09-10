@@ -242,3 +242,10 @@ For detailed information, see the `agents/` directory:
 - **[agents/rules/](agents/rules/)** - Modular engineering rules
 - **[agents/commands.md](agents/commands.md)** - Complete command reference
 - **[agents/knowledge-base.md](agents/knowledge-base.md)** - Domain knowledge and business rules
+
+## Base44 dev environment
+
+- Run with `docker compose -f docker-compose.base44.yml up -d` (postgres + `node:20` running `yarn install` then `yarn dev` on the bind-mounted source). First boot takes ~10 minutes (yarn install + Prisma migrate deploy + Next turbopack compile).
+- Preview is host port 3000. With an empty DB, `/` redirects to `/auth/login` → `/auth/setup?step=1` (first-run admin wizard) — that is a healthy boot, not an error.
+- Secrets (`NEXTAUTH_SECRET`, `CALENDSO_ENCRYPTION_KEY`, `CRON_API_KEY`) come from `/run/base44/app.env`; placeholder non-secret defaults live in `.env.base44-defaults`.
+- `apps/web/next.config.ts` adds `allowedDevOrigins` from `BASE44_PUBLIC_HOST_SUFFIX` so the sandbox preview origin can load dev assets/HMR.
