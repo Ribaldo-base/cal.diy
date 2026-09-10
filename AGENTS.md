@@ -242,3 +242,11 @@ For detailed information, see the `agents/` directory:
 - **[agents/rules/](agents/rules/)** - Modular engineering rules
 - **[agents/commands.md](agents/commands.md)** - Complete command reference
 - **[agents/knowledge-base.md](agents/knowledge-base.md)** - Domain knowledge and business rules
+
+## Base44 dev environment
+
+- Run with `docker compose -f docker-compose.base44.yml up -d` (postgres + one-shot `install`/`migrate` + `web` Next dev on port 3000).
+- Seeded dev logins come from `packages/prisma/seed.ts` (e.g. `pro@example.com` / `pro`).
+- `prisma generate` warns during yarn install postinstall but the `migrate` service runs migrations + seed successfully; the dev server generates the client as needed.
+- App URLs are derived from `BASE44_PUBLIC_HOST_SUFFIX`; `apps/web/next.config.ts` adds `allowedDevOrigins` for that host.
+- Verify with `curl -I localhost:3000/auth/login` (first request compiles for ~1-2 min).
