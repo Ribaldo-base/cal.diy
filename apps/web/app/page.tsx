@@ -6,24 +6,25 @@ import { getServerSession } from "@calcom/features/auth/lib/getServerSession";
 
 import { buildLegacyRequest } from "@lib/buildLegacyCtx";
 
+import { EmailDomainDashboard } from "@components/email-domain-dashboard";
+
 const RedirectPage = async () => {
   const session = await getServerSession({ req: buildLegacyRequest(await headers(), await cookies()) });
 
-  if (!session?.user?.id) {
-    redirect("/auth/login");
+  if (session?.user?.id) {
+    // Check if user needs onboarding and redirect before going to event-types
+    const organizationId = session.user.profile?.organizationId ?? null;
+    const onboardingPath = await checkOnboardingRedirect(session.user.id, {
+      checkEmailVerification: true,
+      organizationId,
+    });
+    if (onboardingPath) {
+      redirect(onboardingPath);
+    }
+    redirect("/event-types");
   }
 
-  // Check if user needs onboarding and redirect before going to event-types
-  const organizationId = session.user.profile?.organizationId ?? null;
-  const onboardingPath = await checkOnboardingRedirect(session.user.id, {
-    checkEmailVerification: true,
-    organizationId,
-  });
-  if (onboardingPath) {
-    redirect(onboardingPath);
-  }
-
-  redirect("/event-types");
+  return <EmailDomainDashboard />;
 };
 
 export default RedirectPage;
